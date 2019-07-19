@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inicio{% endblock %}
+
+{% block body %}
+{{ dump() }}
+
+Holi {{ app.user|default('anónimo') }}, estás en: <span style="color:red;">{{ app.request.attributes.get('_route') }}</span>
+{% endblock %}
+

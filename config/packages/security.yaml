@@ -1,0 +1,42 @@
+security:
+    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
+    providers:
+        admins:
+            memory:
+                users:
+                    admin: { password: 'admin', roles: ['ROLE_ADMIN'] }
+        clientes:
+            memory:
+                users:
+                    santiago: { password: '1234', roles: ['ROLE_USER'] }
+                    negra: { password: '5678', roles: ['ROLE_USER'] }
+                    chola: { password: '9876', roles: ['ROLE_USER', 'ROLE_ADMIN'] }
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        admin:
+            pattern: ^/admin/
+            anonymous: true
+            provider: admins
+            guard:
+                authenticators:
+                    - App\Security\AppAdminInMemoryAuthenticator
+            logout:
+                path: app_admin_logout
+        main:
+            anonymous: true
+            provider: clientes
+            guard:
+                authenticators:
+                    - App\Security\AppInMemoryAuthenticator
+            logout:
+                path: app_logout
+    # Easy way to control access for large sections of your site. Only the *first* access control that matches will be used
+    access_control:
+        # admin paths
+        - { path: ^/admin/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/admin, roles: ROLE_ADMIN }
+        # clientes paths
+        - { path: ^/pagar, roles: ROLE_USER }
+        
